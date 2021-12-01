@@ -51,4 +51,5 @@ export class Slice {
     @IsNumber()
     @IsNotEmpty()
     duration: number;   
+  
 }

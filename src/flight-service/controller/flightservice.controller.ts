@@ -9,16 +9,6 @@ export class FlightServiceController {
         private flightService: FlightService
     ){}
 
-    @Get('/call1')
-    callFlightService1(): Observable<FlightServiceDTO>{
-        return this.flightService.callFlightService1();
-    }
-
-    @Get('/call2')
-    callFlightService2(): Observable<FlightServiceDTO>{
-        return this.flightService.callFlightService2();
-    }
-
     @Get('/call3')
     callFlightList(): Observable<FlightServiceDTO>{
         return this.flightService.getFlightList();

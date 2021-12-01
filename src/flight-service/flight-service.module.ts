@@ -1,14 +1,14 @@
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { FlightServiceController } from './controller/flightservice.controller';
-import { FlightServiceUtility } from './flight-service.utility';
 import { FlightService } from './service/flight-service/flight-service.service';
+import { DataService } from './service/data-service/data-service.service';
 
 @Module({
   imports: [HttpModule.register({
     timeout: 950
   })],
   controllers: [FlightServiceController],
-  providers: [FlightService, FlightServiceUtility]
+  providers: [FlightService, DataService]
 })
 export class FlightServiceModule {}
