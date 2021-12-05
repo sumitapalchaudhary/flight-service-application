@@ -4,7 +4,7 @@ import { FlightServiceDTO } from '../../../flight-service/dto/flight-service.dto
 import { DataService } from './data-service.service';
 import * as mockResponse from '../../../mock_data/response.json';
 import { HttpModule, HttpService } from '@nestjs/axios';
-import { delay, Observable, of, throwError } from 'rxjs';
+import { delay, of, throwError } from 'rxjs';
 
 describe('DataServiceService', () => {
   let service: DataService;

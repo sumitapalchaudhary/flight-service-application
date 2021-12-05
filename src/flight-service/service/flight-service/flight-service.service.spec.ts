@@ -1,4 +1,4 @@
-import { HttpModule, HttpService } from '@nestjs/axios';
+import { HttpModule } from '@nestjs/axios';
 import { Test, TestingModule } from '@nestjs/testing';
 import { of } from 'rxjs';
 import { Flight, FlightServiceDTO, Slice } from '../../dto/flight-service.dto';

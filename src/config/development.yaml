@@ -1,6 +1,0 @@
-profile: 
-  development
-service:
-  url1: "http://164.90.161.111:8080/flight/source1"
-  url2: "http://164.90.161.111:8080/flight/source2"
-  timeout: 950
