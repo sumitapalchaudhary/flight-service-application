@@ -1,19 +1,43 @@
-import { HttpModule } from '@nestjs/axios';
+import { HttpModule, HttpService } from '@nestjs/axios';
 import { Test, TestingModule } from '@nestjs/testing';
-import { Flight, Slice } from '../../dto/flight-service.dto';
+import { of } from 'rxjs';
+import { Flight, FlightServiceDTO, Slice } from '../../dto/flight-service.dto';
+import { DataService } from '../data-service/data-service.service';
 import { FlightService } from './flight-service.service';
+import * as mockfirst from '../../../mock_data/first_flights.json';
+import * as mocksecond from '../../../mock_data/second_flights.json';
+import * as mockResponse from '../../../mock_data/response.json';
+
 
 describe('FlightService', () => {
-  let service: FlightService;
+  let flightService: FlightService;
+  let mockDataService: jest.Mock;
+  class DataServiceMock {
+    callFlightDataService(url: string) {
+      let flightServiceDTO = new FlightServiceDTO()
+      return of(flightServiceDTO as FlightServiceDTO);
+    }
+   }
+   let mockDataServiceInstance: { [key: string]: jest.Mock } = {
+    callFlightDataService: jest.fn()
+  };
+  
 
   beforeEach(async () => {
-
+    mockDataService = jest
+      .fn()
+      .mockReturnValue(mockDataServiceInstance);
+    const DataServiceProvider = {
+      provide: DataService,
+      useClass: mockDataService,
+    };
     const module: TestingModule = await Test.createTestingModule({
       imports: [HttpModule],
-      providers: [FlightService],
+      providers: [FlightService, DataServiceProvider],
     }).compile();
 
-    service = module.get<FlightService>(FlightService);
+    flightService = module.get<FlightService>(FlightService);
+    mockDataService = module.get(DataService); 
   });
 
   it('is same flight', () => {
@@ -43,6 +67,13 @@ describe('FlightService', () => {
     flight2Slice2.duration = 400;
 
     flight2.slices = [flight2Slice1, flight2Slice2]
-    expect(service.isSameFlight(flight1, flight2)).toEqual(true);
+    expect(flightService.isSameFlight(flight1, flight2)).toEqual(true);
   });
+
+  it('getCombinedFlightsWithoutDuplicates removes duplicates', () => {
+    mockDataServiceInstance.callFlightDataService.mockReturnValueOnce(of(mockfirst as FlightServiceDTO));
+    mockDataServiceInstance.callFlightDataService.mockReturnValueOnce(of(mocksecond as FlightServiceDTO));
+
+    flightService.getCombinedFlightsWithoutDuplicates().subscribe(response => expect(response).toEqual(mockResponse));
+  })
 });

@@ -11,6 +11,6 @@ export class FlightServiceController {
 
     @Get('/call3')
     callFlightList(): Observable<FlightServiceDTO>{
-        return this.flightService.getFlightList();
+        return this.flightService.getCombinedFlightsWithoutDuplicates();
     }
 }

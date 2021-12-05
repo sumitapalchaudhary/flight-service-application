@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { catchError, map, Observable, of, zip } from 'rxjs';
 import { Flight, FlightServiceDTO } from '../../dto/flight-service.dto';
 import { DataService } from '../data-service/data-service.service';
@@ -7,13 +8,16 @@ import { DataService } from '../data-service/data-service.service';
 export class FlightService {
     emptyResponse: FlightServiceDTO = new FlightServiceDTO();
     
-    constructor(private dataService: DataService) {}
+    constructor(
+        private dataService: DataService,
+        private configService: ConfigService
+        ) {}
 
-    getFlightList(): Observable<FlightServiceDTO> 
+    getCombinedFlightsWithoutDuplicates(): Observable<FlightServiceDTO> 
     {
         this.emptyResponse.flights = [];
-        let flightList1: Observable<FlightServiceDTO> = this.dataService.callFlightDataService('http://164.90.161.111:8080/flight/source1');
-        let flightList2: Observable<FlightServiceDTO> = this.dataService.callFlightDataService('http://164.90.161.111:8080/flight/source2');
+        let flightList1: Observable<FlightServiceDTO> = this.dataService.callFlightDataService(this.configService.get<string>('service.url1'));
+        let flightList2: Observable<FlightServiceDTO> = this.dataService.callFlightDataService(this.configService.get<string>('service.url2'));
         
         return zip(flightList1,flightList2).pipe(map(([x, y]) => {
             let flightsToReturn = new FlightServiceDTO();
