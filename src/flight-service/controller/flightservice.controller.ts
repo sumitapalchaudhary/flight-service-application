@@ -9,7 +9,7 @@ export class FlightServiceController {
         private flightService: FlightService
     ){}
 
-    @Get('/call3')
+    @Get('/getFlights')
     callFlightList(): Observable<FlightServiceDTO>{
         return this.flightService.getCombinedFlightsWithoutDuplicates();
     }

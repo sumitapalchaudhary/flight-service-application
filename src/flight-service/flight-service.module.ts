@@ -3,15 +3,11 @@ import { Module } from '@nestjs/common';
 import { FlightServiceController } from './controller/flightservice.controller';
 import { FlightService } from './service/flight-service/flight-service.service';
 import { DataService } from './service/data-service/data-service.service';
-import { HttpConfigService } from './service/http-config/http-config.service';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
-  imports: [
-    HttpModule.registerAsync({
-      useClass: HttpConfigService
-    })
-  ],
+  imports: [HttpModule],
   controllers: [FlightServiceController],
-  providers: [FlightService, DataService, HttpConfigService]
+  providers: [FlightService, DataService, ConfigService]
 })
 export class FlightServiceModule {}
